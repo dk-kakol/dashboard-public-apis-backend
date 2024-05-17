@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs');
+
 const ApiEntry = require('../models/apiEntries');
 const Cors = require('../models/cors');
 const Auth = require('../models/auth');
@@ -18,10 +20,12 @@ async function init(db) {
   const permissions = await Permission.insertMany(resourcePermissions);
   const permissionsId = await permissions.map(permission => permission._id);
 
+  const hash = await bcrypt.hash(process.env.npm_config_password, 10);
   const user = await User.create({
     email: process.env.npm_config_email,
-    password: process.env.npm_config_password,
+    password: hash,
     permissions: permissionsId,
+    addApisLimit: 100
   })
 
   await Cors.insertMany(resourceCors);
@@ -41,7 +45,7 @@ async function init(db) {
       Auth: auth._id,
       Category: category._id,
       Creator: user._id,
-      ApiVerified: true,
+      ApiApproved: true,
     }
   }));
   const apiEntries = await ApiEntry.insertMany(resourceEntries);

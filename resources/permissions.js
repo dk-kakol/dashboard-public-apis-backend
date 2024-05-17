@@ -1,5 +1,5 @@
 module.exports = [
   { name: 'addApiEntry', description: 'Dodawanie nowych wpisów public api' },
-  { name: 'auditAndDeleteApiEntry', description: 'Audytowanie i usuwanie wpisów public api' },
-  { name: 'managePermission', description: 'Uprawnienie do nadawania/odbierania uprawnień użytkownikowi'},
+  { name: 'manageApiEntry', description: 'Zarządzanie wpisami public api' },
+  { name: 'manageUsers', description: 'Zarządzanie userami i ich uprawnieniami'},
 ];

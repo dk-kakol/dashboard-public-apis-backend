@@ -10,6 +10,7 @@ const userSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Permission'
   }],
+  imagePath: { type: String }
 });
 
 userSchema.plugin(uniqueValidator);

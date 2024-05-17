@@ -24,7 +24,7 @@ const apiEntrySchema =  mongoose.Schema({
     ref: "User",
     required: true
   },
-  ApiVerified: { type: Boolean, default: false }
+  ApiApproved: { type: Boolean, default: false }
 })
 
 module.exports = mongoose.model('ApiEntry', apiEntrySchema);

@@ -1,6 +1,7 @@
 const app = require("./app");
 const debug = require("debug")("node-vue");
 const http = require("http");
+const WebSocket = require("ws");
 
 const normalizePort = val => {
   var port = parseInt(val, 10);
@@ -48,6 +49,28 @@ const port = normalizePort(process.env.PORT || "4000");
 app.set("port", port);
 
 const server = http.createServer(app);
+
+const websocketServer = new WebSocket.Server({ server });
+
 server.on("error", onError);
 server.on("listening", onListening);
 server.listen(port);
+
+websocketServer.on('connection', (socket) => {
+  // Log a message when a new client connects
+  console.log('client connected.');
+  // Listen for incoming WebSocket createApiEntry
+  socket.on('message', (data) => {
+    // Broadcast the message to all connected clients
+     websocketServer.clients.forEach(function each(client) {
+       if (client !== socket && client.readyState === WebSocket.OPEN) {
+         client.send(data.toString());
+       }
+     });
+   });
+   // Listen for WebSocket connection close events
+   socket.on('close', () => {
+     // Log a message when a client disconnects
+     console.log('Client disconnected');
+   });
+})

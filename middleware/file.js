@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
     if (isValid) {
       error = null;
     }
-    cb(error, process.env.PATH_IMAGES);
+    cb(error, process.env.PATH_IMAGES_DASHBOARD_PUBLIC_APIS);
   },
   filename: (req, file, cb) => {
     const name = file.originalname

@@ -8,7 +8,7 @@ const userRoutes = require('./routes/user');
 const apiEntriesRoutes = require('./routes/apiEntries');
 
 const app = express();
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_URL_DASHBOARD_PUBLIC_APIS)
   .then(()=> {
     console.log('Connected to database');
   })
@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGO_URL)
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use('/images', express.static(path.join(process.env.PATH_IMAGES)));
+app.use('/images', express.static(path.join(process.env.PATH_IMAGES_DASHBOARD_PUBLIC_APIS)));
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*'); //allow all domains to reach backend

@@ -59,6 +59,7 @@ server.listen(port);
 websocketServer.on('connection', (socket) => {
   // Log a message when a new client connects
   console.log('client connected.');
+
   // Listen for incoming WebSocket createApiEntry
   socket.on('message', (data) => {
     // Broadcast the message to all connected clients
@@ -68,6 +69,7 @@ websocketServer.on('connection', (socket) => {
        }
      });
    });
+   
    // Listen for WebSocket connection close events
    socket.on('close', () => {
      // Log a message when a client disconnects

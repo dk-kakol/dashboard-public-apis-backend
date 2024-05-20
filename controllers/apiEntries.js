@@ -14,12 +14,53 @@ const mapApiEntry = (apiEntryDoc) => ({
 
 exports.getApiEntries = async (req, res, next) => {
   try {
-    const apiEntries = await ApiEntry.find({ ApiApproved: true })
+    let query = ApiEntry.find({ ApiApproved: true});
+    if (req.query?.auth) {
+      query = query.find({ Auth: req.query?.auth });
+    }
+    if (req.query?.https) {
+      let https;
+      if (req.query.https === 'true') {
+        https = true;
+      } 
+      else if (req.query.https === 'false') {
+        https = false;
+      } 
+      else {
+        https = req.params.https;
+      }
+      query = query.find({ HTTPS: https });
+    }
+    if (req.query?.cors) {
+      query = query.find({ Cors: req.query?.cors });
+    }
+    if (req.query?.category) {
+      query = query.find({ Category: req.query?.category });
+    }
+    if (req.query?.search) {
+      const searchRegex = { "$regex": req.query.search, "$options": "i" }
+      query = query.find({ $or: [
+        { API: searchRegex },
+        { Description: searchRegex },
+        { Link: searchRegex }
+      ]})
+    }
+    const apiEntriesWithoutOffsetAndLimit = await query
+      .exec();
+    if (req.query?.offset) {
+      query = query.skip(req.query?.offset);
+    }
+    if (req.query?.limit) {
+      query = query.limit(req.query?.limit);
+    }
+    const apiEntries = await query
+      .clone()
       .populate('Auth')
       .populate('Category')
-      .populate('Cors');
+      .populate('Cors')
+      .exec();
     res.status(200).json({
-      count: apiEntries.length,
+      count: apiEntriesWithoutOffsetAndLimit.length,
       entries: apiEntries.map(apiEntry => mapApiEntry(apiEntry))
     })
 
@@ -98,8 +139,6 @@ exports.deleteApiEntry = async (req, res, next) => {
 };
 
 exports.approveApiEntry = async (req, res, next) => {
-// case delete usera po utworzeniu:
-// - spr: czy mogę usunąć usera jak ma utworzone apiEntry, po usunięciu sprawdzić pozostałe requesty związane z jego apiEntry
 try {
   const apiEntry = await ApiEntry.findById(req.params.id);
   if (!apiEntry) {

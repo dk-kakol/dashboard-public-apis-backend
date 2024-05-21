@@ -5,7 +5,7 @@ const initScript  = require('./init');
 const { env } = require('../nodemon.json');
 
 async function main() {
-  const db = await mongoose.connect(env.MONGO_URL);
+  const db = await mongoose.connect(env.MONGO_URL_DASHBOARD_PUBLIC_APIS);
 
   const permittedScripts = {
     default: defaultScript,

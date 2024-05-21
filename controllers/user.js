@@ -21,7 +21,7 @@ exports.createUser = async (req, res, next) => {
     let imagePath;
     if (req.file) {
       const url = await (req.protocol + "://" + req.get("host"))
-      imagePath = `${url}/${process.env.PATH_IMAGES_DASHBOARD_PUBLIC_APIS}/${req.file.filename}`;
+      imagePath = `${url}/images/${req.file.filename}`;
       user.imagePath = imagePath;
       await user.save();
     }
@@ -101,7 +101,7 @@ exports.updateUser = async (req, res, next) => {
     }
     if (req.file) {
       const url = await (req.protocol + "://" + req.get("host"))
-      imagePath = `${url}/${process.env.PATH_IMAGES_DASHBOARD_PUBLIC_APIS}/${req.file.filename}`;
+      imagePath = `${url}/images/${req.file.filename}`;
       user.imagePath = imagePath;
     }
     await user.save();
